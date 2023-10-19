@@ -20,6 +20,13 @@ compile-mac:
 	go env -w CGO_ENABLED=1
 	go build -o mac/rubixgoplatform_amd64
 
+compile-pi:
+	echo "Compiling for Raspberry Pi arm64"
+	go env -w GOOS=linux
+	go env -w GOARCH=arm64
+	go env -w CGO_ENABLED=1
+	go build -o pi/rubixgoplatform_arm64
+
 clean:
 	rm -f linux/rubixgoplatform windows/rubixgoplatform.exe mac/rubixgoplatform_arm64 mac/rubixgoplatform_amd64
 
