@@ -5,9 +5,9 @@ import (
 	"net/http"
 
 	"github.com/EnsurityTechnologies/config"
-	"github.com/EnsurityTechnologies/ensweb"
 	"github.com/EnsurityTechnologies/helper/jsonutil"
 	"github.com/EnsurityTechnologies/logger"
+	"github.com/gklps/ensweb"
 )
 
 const (
@@ -45,6 +45,7 @@ type ExplorerTrans struct {
 	Amount      float64  `json:"amount"`
 	TrasnType   int      `json:"transaction_type"`
 	QuorumList  []string `json:"quorum_list"`
+	DeployerDID string   `json:"deployer_did"`
 }
 
 type ExplorerDataTrans struct {

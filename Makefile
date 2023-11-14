@@ -14,11 +14,7 @@ compile-mac:
 	go env -w GOOS=darwin
 	go env -w GOARCH=arm64
 	go env -w CGO_ENABLED=1
-	go build -o mac/rubixgoplatform_arm64
-	echo "Compiling for MacOS amd64"
-	go env -w GOARCH=amd64
-	go env -w CGO_ENABLED=1
-	go build -o mac/rubixgoplatform_amd64
+	go build -o mac/rubixgoplatform
 
 compile-pi:
 	echo "Compiling for Raspberry Pi arm64"
@@ -28,6 +24,6 @@ compile-pi:
 	go build -o pi/rubixgoplatform_arm64
 
 clean:
-	rm -f linux/rubixgoplatform windows/rubixgoplatform.exe mac/rubixgoplatform_arm64 mac/rubixgoplatform_amd64
+	rm -f linux/rubixgoplatform windows/rubixgoplatform.exe mac/rubixgoplatform
 
 all: compile-linux compile-windows compile-mac

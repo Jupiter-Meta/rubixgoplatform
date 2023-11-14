@@ -64,7 +64,10 @@ func (w *Wallet) GetDIDDir(dir string, did string) (*DIDType, error) {
 
 func (w *Wallet) GetDID(did string) (*DIDType, error) {
 	var dt DIDType
+	w.log.Debug("did value passed inside is", "did", did)
 	err := w.s.Read(DIDStorage, &dt, "did=?", did)
+	w.log.Debug("db print DID", "did", w.s.Read(DIDStorage, &dt, "did=?", did))
+	w.log.Debug("GetDID", "did", did)
 	if err != nil {
 		w.log.Error("Failed to get DID", "err", err)
 		return nil, err
@@ -85,7 +88,11 @@ func (w *Wallet) IsDIDExist(did string) bool {
 func (w *Wallet) AddDIDPeerMap(did string, peerID string) error {
 	lastChar := string(did[len(did)-1])
 	var dm DIDPeerMap
-	err := w.s.Read(DIDPeerStorage, &dm, "did=?", did)
+	err := w.s.Read(DIDStorage, &dm, "did=?", did)
+	if err == nil {
+		return nil
+	}
+	err = w.s.Read(DIDPeerStorage, &dm, "did=?", did)
 	if err != nil {
 		dm.DID = did
 		dm.PeerID = peerID

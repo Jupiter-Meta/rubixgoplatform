@@ -12,9 +12,9 @@ import (
 
 	"github.com/EnsurityTechnologies/apiconfig"
 	econfig "github.com/EnsurityTechnologies/config"
-	"github.com/EnsurityTechnologies/ensweb"
 	"github.com/EnsurityTechnologies/logger"
 	"github.com/EnsurityTechnologies/uuid"
+	"github.com/gklps/ensweb"
 	ipfsnode "github.com/ipfs/go-ipfs-api"
 	"github.com/rubixchain/rubixgoplatform/core/config"
 	"github.com/rubixchain/rubixgoplatform/core/ipfsport"
@@ -406,6 +406,23 @@ func (c *Core) CreateTempFolder() (string, error) {
 	return folderName, err
 }
 
+func (c *Core) CreateSCTempFolder() (string, error) {
+	folderName := c.cfg.DirPath + "SmartContract/" + uuid.New().String()
+	err := os.MkdirAll(folderName, os.ModeDir|os.ModePerm)
+	return folderName, err
+}
+
+func (c *Core) RenameSCFolder(tempFolderPath string, smartContractName string) (string, error) {
+
+	scFolderName := c.cfg.DirPath + "SmartContract/" + smartContractName
+	err := os.Rename(tempFolderPath, scFolderName)
+	if err != nil {
+		c.log.Error("Unable to rename ", tempFolderPath, " to ", scFolderName, "error ", err)
+		scFolderName = ""
+	}
+	return scFolderName, err
+}
+
 func (c *Core) HandleQuorum(conn net.Conn) {
 
 }
@@ -476,6 +493,7 @@ func (c *Core) RemoveWebReq(reqID string) *ensweb.Request {
 
 func (c *Core) SetupDID(reqID string, didStr string) (did.DIDCrypto, error) {
 	dt, err := c.w.GetDID(didStr)
+	c.log.Debug("dt is", "dt", dt)
 	if err != nil {
 		c.log.Error("DID does not exist", "did", didStr)
 		return nil, fmt.Errorf("DID does not exist")
